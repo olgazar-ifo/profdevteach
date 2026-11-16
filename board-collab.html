@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Вправа: проєкт і спільна робота учнів на онлайн-дошці</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDF2F4;--surf:#fff;--ink:#15232A;--mute:#55666F;--line:#C8D5DB;--acc:#0B6F78;--accink:#fff;--ok:#1B7F4B;--bad:#B3402A;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11181C;--surf:#1A252B;--ink:#E7EEF1;--mute:#9DB0B9;--line:#2D3C44;--acc:#4FC3CC;--accink:#072B2F;--ok:#6BD39A;--bad:#FF9C86;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11181C;--surf:#1A252B;--ink:#E7EEF1;--mute:#9DB0B9;--line:#2D3C44;--acc:#4FC3CC;--accink:#072B2F;--ok:#6BD39A;--bad:#FF9C86;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Onest,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 48px}
+header h1{font-size:clamp(1.4rem,4.5vw,2rem);line-height:1.2;margin:0 0 6px}
+header p{margin:0;color:var(--mute);max-width:62ch}
+nav{display:flex;gap:6px;overflow-x:auto;padding:16px 0 12px;scrollbar-width:thin}
+nav button{flex:0 0 auto;border:2px solid var(--line);background:var(--surf);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;font-weight:500;cursor:pointer}
+nav button.act{border-color:var(--acc);background:var(--acc);color:var(--accink)}
+nav button.done::after{content:" ✓"}
+nav .sep{flex:0 0 2px;background:var(--line);margin:0 4px}
+#panel{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:20px 18px}
+.kind{margin:0 0 4px;color:var(--mute);font-size:.9rem}
+h2{margin:0 0 10px;font-size:1.4rem;line-height:1.25}
+h3{margin:22px 0 10px;font-size:1.05rem}
+.story{margin:0;font-size:1.05rem}
+.lvl{display:inline-flex;gap:3px;align-items:center;margin-left:8px;vertical-align:middle;font-size:.85rem;color:var(--mute);font-weight:400}
+.lvl i{width:9px;height:9px;border-radius:50%;border:2px solid var(--acc);display:inline-block}
+.lvl i.f{background:var(--acc)}
+.opts{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.note{font:inherit;color:#1b1b1b;text-align:left;border:3px solid transparent;border-radius:4px;padding:14px 14px 16px;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.18);min-height:92px}
+.note:nth-child(odd){transform:rotate(-.5deg)}.note:nth-child(even){transform:rotate(.4deg)}
+.n0{background:#FFE27A}.n1{background:#BFE8C9}.n2{background:#C9E3F5}.n3{background:#FFD3C7}
+.note.sel{border-color:var(--acc);outline:3px solid var(--surf);outline-offset:-6px}
+.note.ok{border-color:#1B7F4B}.note.ok::after{content:"  ✓ правильно";font-weight:700}
+.note.no{border-color:#B3402A}.note.no::after{content:"  ✕ інакше";font-weight:700}
+textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:8px;padding:10px}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.lbl{display:block;margin:20px 0 6px;font-weight:500}
+.btn{margin-top:14px;border:0;background:var(--acc);color:var(--accink);font:inherit;font-weight:700;border-radius:8px;padding:10px 18px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.warn{color:var(--bad);margin:8px 0 0;min-height:1.2em}
+.fb{margin-top:20px;border-top:2px solid var(--line);padding-top:6px}
+.fb li{margin:12px 0;list-style:none}
+.fb ul{padding:0;margin:0}
+.chip{display:inline-block;border-radius:99px;padding:1px 10px;font-size:.85rem;font-weight:700;margin-right:6px;color:#1b1b1b}
+.t0{background:#CDEBD6}.t1{background:#FFE9A8}.t2{background:#FFC9BC}
+.disc{background:var(--bg);border-left:5px solid var(--acc);border-radius:6px;padding:12px 14px;margin-top:18px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;margin:10px 0}
+.row.ok select{border-color:var(--ok)}.row.no select{border-color:var(--bad)}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:2px solid var(--line);border-radius:8px;margin:8px 0;cursor:pointer}
+.chk input{margin-top:5px;width:18px;height:18px;accent-color:var(--acc)}
+.chk.ok{border-color:var(--ok)}.chk.no{border-color:var(--bad)}
+.res{font-weight:700;margin:14px 0 4px}
+.nav2{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
+.sum li{margin:10px 0}.sum pre{white-space:pre-wrap;font:inherit;background:var(--bg);padding:10px;border-radius:8px;margin:4px 0}
+@media (max-width:560px){.row{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Спільна робота й проєкти учнів на онлайн-дошці</h1>
+<p>Чотири ситуації для обговорення й шість завдань різної складності. Обирайте варіант, записуйте власну відповідь, порівнюйте з коментарями й обговорюйте в групі.</p>
+</header>
+<nav id="nav" aria-label="Кроки вправи"></nav>
+<main id="panel" tabindex="-1"></main>
+</div>
+<script>
+const S=[
+{id:"s1",t:"Працює один, решта дивляться",txt:"У групі з чотирьох учнів на дошці діє лише один: додає стікери, пересуває об’єкти й пише текст. Решта спостерігають. До кінця уроку лишилося 20 хвилин.",
+o:[["Призначити кожному роль, колір стікерів і власну зону у фреймі групи",0,"Кожен має відповідальність і видимий слід, а вчитель одразу бачить, хто що зробив."],
+["Попросити активного учня відійти від дошки й дати слово іншим",2,"Це зупиняє роботу й може принизити учня. Краще змінити структуру завдання, ніж відсторонювати."],
+["Сказати, що оцінка буде спільна, і нехай групи розбираються самі",2,"Спільна оцінка без структури підсилює пасивність і провокує образи."],
+["Розбити тему на частини, без кожної з яких проєкт не завершити (мозаїка)",0,"Взаємозалежність змушує діяти всіх. Потрібен час, щоб підготувати частини."]],
+q:"Як ви дізнаєтеся, що розподіл ролей спрацював, не стоячи над кожною групою?"},
+{id:"s2",t:"Хаос на полотні",txt:"25 учнів одночасно працюють на одній дошці. Об’єкти пересуваються, хтось випадково видаляє чужі стікери, у класі зростає шум.",
+o:[["Заблокувати фрейми й шаблон, а правила дошки записати на видному місці",0,"Структура захищає від випадкових змін. Перевірте, чи є блокування у вашому тарифі."],
+["Дати кожній групі окрему копію дошки",1,"Хаосу менше, але ви втрачаєте цілісну картину, а на безкоштовному тарифі ліміт дошок швидко вичерпається."],
+["Перейти до роботи по черзі: один біля екрана, решта на папері",2,"Зникає головна перевага: одночасна робота всіх."],
+["Разом з учнями домовитися про правила, кольори й таймер на кожен крок",0,"Правила, які класи складають самі, працюють краще за накази. Темп знижує шум."]],
+q:"Які три правила дошки ви записали б для свого класу?"},
+{id:"s3",t:"Тихі та швидкі",txt:"Під час обговорення ідей відповідають одні й ті самі учні, решта мовчить. Вам потрібні ідеї від усіх за 5 хвилин.",
+o:[["Тиха дискусія: усі пишуть ідеї на стікерах, потім групують і голосують",0,"Кожен має голос, а сором’язливі учні не змагаються за слово."],
+["Викликати мовчазних учнів по черзі вголос",2,"Підсилює тривогу й не додає якісних ідей."],
+["Дозволити стікери без підпису, а потім обговорити їх разом",1,"Знижує страх помилки, але ускладнює зворотний зв’язок. Потрібні чіткі правила поваги."],
+["Залишити як є: активні учні й так дадуть достатньо ідей",2,"Ви втрачаєте половину класу й закріплюєте звичку мовчати."]],
+q:"Що ви зробите, щоб ідеї тихих учнів було чути на етапі голосування?"},
+{id:"s4",t:"Проєкт загубився",txt:"Проєкт триває два тижні. Через тиждень групи не пам’ятають, що вже зроблено й що далі. Дедлайн наближається.",
+o:[["Додати Kanban «Плануємо / Робимо / Готово» і проміжні контрольні точки",0,"Прогрес видно всім на одному екрані, а групи самі керують завданнями."],
+["Просити групи щодня надсилати вам звіт у месенджері",1,"Дає контроль, але збільшує ваше навантаження й виносить прогрес за межі спільного простору."],
+["Перевіряти кожну групу особисто на кожному уроці",1,"Підтримка важлива, але групи лишаються залежними від вас."],
+["Провести міні-ретроспективу: що зроблено, що заважає, що далі",0,"Короткий шаблон повертає команді контроль і дає вам дані для підтримки."]],
+q:"Яка контрольна точка потрібна саме вашому проєкту і хто її веде?"}
+];
+const T=[
+{id:"t1",lv:1,type:"single",t:"Окремий простір для групи",txt:"Кожна група має працювати у власній зоні й не заважати іншим. Який інструмент дошки для цього підходить найкраще?",
+o:["Стікери одного кольору","Фрейми","Режим презентації","Коментарі"],ans:1,ex:"Фрейми ділять полотно на зони: у кожної групи свій «стіл», а вчитель бачить усі зони разом."},
+{id:"t2",lv:1,type:"match",t:"Мета й інструмент",txt:"Поєднайте педагогічну мету з найбільш доречним інструментом чи прийомом.",
+tg:["Тиха дискусія на стікерах","Kanban-дошка","Галерея","Шаблон ретроспективи"],
+r:[["Зібрати ідеї від усіх, не змушуючи говорити вголос",0],["Розподілити завдання й бачити прогрес",1],["Показати результати групи й отримати відгуки",2],["Підвести підсумки проєкту",3]]},
+{id:"t3",lv:2,type:"multi",t:"Переваги спільної дошки",txt:"Позначте твердження, які справді є перевагами спільної дошки порівняно з паперовим плакатом.",
+o:[["Усі учні можуть працювати одночасно",1],["Вчителю більше не потрібно ставити завдання й оцінювати",0],["Прогрес груп видно в реальному часі",1],["До роботи можна повернутися після уроку",1],["Результат автоматично стає якіснішим",0],["Дошку можна структурувати фреймами та шаблонами",1]],
+ex:"Дошка не замінює вчителя й не гарантує якості. Вона робить спільну роботу видимою, одночасною й структурованою."},
+{id:"t4",lv:2,type:"open",t:"Ролі в групі",txt:"Група з чотирьох учнів виконує проєкт «Еко-маршрут нашого міста». Запропонуйте чотири ролі й опишіть, що кожен робить на дошці.",
+ex:"Координатор (веде Kanban і час), Дослідник (збирає факти й посилання у своїй зоні), Дизайнер дошки (структура, кольори, оформлення), Спікер (готує презентацію й веде галерею). Ролі змінюються між етапами."},
+{id:"t5",lv:3,type:"open",t:"Оцінювання внеску",txt:"Складіть три критерії оцінювання індивідуального внеску учня на спільній дошці, не спираючись лише на кількість доданих стікерів.",
+ex:"1) Виконання власної ролі та завдань на Kanban. 2) Якість внеску: аргументи, ідеї, коментарі до робіт інших. 3) Рефлексія: що я зробив, чого навчився, що змінив би. Кількість стікерів критерієм не є."},
+{id:"t6",lv:3,type:"open",t:"Структура дошки для проєкту",txt:"Спроєктуйте дошку для двотижневого проєкту: які фрейми будуть на ній, що в кожному і які два прийоми ви застосуєте.",
+ex:"Фрейми: «Тема й мета» (mind map), «Ідеї» (тиха дискусія), «План» (Kanban), «Робочі зони» груп, «Галерея» (відгуки однокласників), «Рефлексія» (ретроспектива). Прийоми: тиха дискусія й галерея. У кожному фреймі коротка інструкція й дедлайн."}
+];
+const items=[...S.map(d=>({k:"s",d})),...T.map(d=>({k:"t",d})),{k:"sum"}];
+let cur=0;let A={};
+const st=id=>A[id]||(A[id]={});
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TAG=["Сильний варіант","Частково","Ризиковано"];
+const LV=["","Легке","Середнє","Складне"];
+const isDone=it=>it.k==="s"?!!st(it.d.id).shown:it.k==="t"?!!st(it.d.id).done:false;
+
+function nav(){
+ $("#nav").innerHTML=items.map((it,i)=>{
+  const lab=it.k==="s"?"С"+(S.indexOf(it.d)+1):it.k==="t"?"З"+(T.indexOf(it.d)+1):"Підсумок";
+  const sep=(i===S.length||i===items.length-1)?'<span class="sep"></span>':"";
+  return sep+`<button class="${i===cur?"act":""} ${isDone(it)?"done":""}" data-go="${i}" aria-label="${it.k==="s"?"Ситуація":it.k==="t"?"Завдання":""} ${lab}">${lab}</button>`}).join("");
+}
+function lvl(n){return `<span class="lvl" title="${LV[n]}">${[1,2,3].map(i=>`<i class="${i<=n?"f":""}"></i>`).join("")}${LV[n]}</span>`}
+function sit(d){
+ const a=st(d.id),n=S.indexOf(d)+1;
+ return `<p class="kind">Ситуація ${n} з 4</p><h2>${d.t}</h2><p class="story">${d.txt}</p>
+ <h3>Що ви зробите?</h3><div class="opts">${d.o.map((o,i)=>`<button class="note n${i%4}${a.c===i?" sel":""}" data-act="pick" data-i="${i}" aria-pressed="${a.c===i}">${o[0]}</button>`).join("")}</div>
+ <label class="lbl" for="own">Ваш власний варіант або доповнення</label>
+ <textarea id="own" data-f="text" rows="3" placeholder="Напишіть, що зробили б ви…">${esc(a.text||"")}</textarea>
+ <button class="btn" data-act="reveal">Показати коментарі</button><p class="warn" id="warn"></p>
+ ${a.shown?`<div class="fb"><h3>Коментарі до варіантів</h3><ul>${d.o.map((o,i)=>`<li><span class="chip t${o[1]}">${TAG[o[1]]}</span><strong>${a.c===i?"Ваш вибір. ":""}</strong>${o[0]}<br><span>${o[2]}</span></li>`).join("")}</ul><div class="disc"><strong>Для обговорення в групі.</strong> ${d.q}</div></div>`:""}`+pager();
+}
+function task(d){
+ const a=st(d.id),n=T.indexOf(d)+1;let body="";
+ if(d.type==="single"){
+  body=`<div class="opts">${d.o.map((o,i)=>`<button class="note n${i%4}${a.c===i?" sel":""}${a.done?(i===d.ans?" ok":a.c===i?" no":""):""}" data-act="pick" data-i="${i}">${o}</button>`).join("")}</div><button class="btn" data-act="check">Перевірити</button>`;
+ }else if(d.type==="match"){
+  body=d.r.map((r,i)=>{const v=a.v&&a.v[i];const c=a.done?(v==r[1]?" ok":" no"):"";
+   return `<div class="row${c}"><span>${r[0]}</span><select data-act="sel" data-i="${i}" aria-label="${esc(r[0])}"><option value="">Оберіть…</option>${d.tg.map((x,j)=>`<option value="${j}"${v==j?" selected":""}>${x}</option>`).join("")}</select></div>`}).join("")+`<button class="btn" data-act="check">Перевірити</button>`;
+ }else if(d.type==="multi"){
+  body=d.o.map((o,i)=>{const on=a.v&&a.v.includes(i);const c=a.done?(o[1]?" ok":(on?" no":"")):"";
+   return `<label class="chk${c}"><input type="checkbox" data-act="chk" data-i="${i}"${on?" checked":""}><span>${o[0]}</span></label>`}).join("")+`<button class="btn" data-act="check">Перевірити</button>`;
+ }else{
+  body=`<label class="lbl" for="own">Ваша відповідь</label><textarea id="own" data-f="text" rows="6" placeholder="Запишіть свої ідеї…">${esc(a.text||"")}</textarea><button class="btn" data-act="reveal">Показати приклад відповіді</button>`;
+ }
+ let res="";
+ if(a.done&&d.type!=="open"){res=`<p class="res">${a.ok?"Все вірно.":"Не все збіглося, перегляньте позначки."}</p>${d.ex?`<p>${d.ex}</p>`:""}`}
+ if(a.done&&d.type==="open"){res=`<div class="disc"><strong>Приклад відповіді.</strong> ${d.ex}<br><br>Порівняйте зі своєю відповіддю: що вам видається доречнішим і чому?</div>`}
+ return `<p class="kind">Завдання ${n} з 6 ${lvl(d.lv)}</p><h2>${d.t}</h2><p class="story">${d.txt}</p><h3 style="margin-top:16px">${d.type==="open"?"":"Ваш вибір"}</h3>${body}<p class="warn" id="warn"></p>${res}`+pager();
+}
+function pager(){return `<div class="nav2"><button class="btn ghost" data-go="${cur-1}"${cur===0?" disabled":""}>Назад</button><button class="btn" data-go="${cur+1}">Далі</button></div>`}
+function report(){
+ let out=[];
+ S.forEach((d,i)=>{const a=st(d.id);out.push(`Ситуація ${i+1}: ${d.t}\nВибір: ${a.c!=null?d.o[a.c][0]:"не обрано"}\nВласна відповідь: ${a.text||"—"}`)});
+ T.forEach((d,i)=>{const a=st(d.id);let r;
+  if(d.type==="open")r=a.text||"—";
+  else if(d.type==="single")r=a.c!=null?d.o[a.c]:"—";
+  else if(d.type==="match")r=d.r.map((x,j)=>x[0]+" → "+(a.v&&a.v[j]!==""&&a.v[j]!=null?d.tg[a.v[j]]:"—")).join("; ");
+  else r=(a.v||[]).map(j=>d.o[j][0]).join("; ")||"—";
+  out.push(`Завдання ${i+1}: ${d.t}\n${r}`)});
+ return out.join("\n\n");
+}
+function sum(){
+ const sd=S.filter(d=>st(d.id).shown).length,td=T.filter(d=>st(d.id).done).length;
+ const auto=T.filter(d=>d.type!=="open"),ok=auto.filter(d=>st(d.id).ok).length;
+ return `<p class="kind">Підсумок</p><h2>Ваші відповіді</h2><p class="story">Розглянуто ситуацій: ${sd} з ${S.length}. Виконано завдань: ${td} з ${T.length}. Вірно в завданнях із перевіркою: ${ok} з ${auto.length}.</p>
+ <div class="sum"><ul style="padding-left:18px">${[...S,...T].map(d=>`<li><strong>${d.t}</strong>${(st(d.id).text)?`<pre>${esc(st(d.id).text)}</pre>`:""}</li>`).join("")}</ul></div>
+ <h3>Що забрати з вправи</h3><p>Оберіть одну ідею з ситуацій чи завдань, яку ви випробуєте на цьому тижні, і запишіть її тут.</p>
+ <textarea data-f="plan" rows="3" placeholder="Моя ідея…">${esc(A.plan||"")}</textarea>
+ <button class="btn" data-act="copy">Копіювати відповіді</button> <button class="btn ghost" data-act="reset">Почати спочатку</button>
+ <p class="warn" id="warn"></p><div id="copybox"></div>`;
+}
+function render(scroll){
+ nav();const it=items[cur];
+ $("#panel").innerHTML=it.k==="s"?sit(it.d):it.k==="t"?task(it.d):sum();
+ if(scroll)$("#panel").scrollIntoView({block:"start"});
+}
+const warn=m=>{const w=$("#warn");if(w)w.textContent=m};
+document.addEventListener("click",e=>{
+ const g=e.target.closest("[data-go]");
+ if(g){const i=+g.dataset.go;if(i>=0&&i<items.length){cur=i;render(true)}return}
+ const b=e.target.closest("[data-act]");if(!b)return;
+ const it=items[cur],d=it.d,a=d?st(d.id):null,act=b.dataset.act;
+ if(act==="pick"){if(a.done)return;a.c=+b.dataset.i;render()}
+ else if(act==="reveal"){
+  if(it.k==="s"&&a.c==null&&!(a.text||"").trim()){warn("Оберіть варіант або напишіть власну відповідь.");return}
+  if(it.k==="t"&&!(a.text||"").trim()){warn("Спершу запишіть свою відповідь, а потім порівняйте з прикладом.");return}
+  a.shown=true;a.done=true;render()}
+ else if(act==="check"){
+  if(d.type==="single"){if(a.c==null){warn("Оберіть один варіант.");return}a.ok=a.c===d.ans}
+  else if(d.type==="match"){if(!a.v||a.v.length<d.r.length||a.v.some(x=>x===""||x==null)){warn("Заповніть усі рядки.");return}a.ok=d.r.every((r,i)=>a.v[i]==r[1])}
+  else{const v=a.v||[];if(!v.length){warn("Позначте хоча б одне твердження.");return}a.ok=d.o.every((o,i)=>!!o[1]===v.includes(i))}
+  a.done=true;render()}
+ else if(act==="copy"){
+  const t=report()+"\n\nМоя ідея на цей тиждень: "+(A.plan||"—");
+  const show=()=>{$("#copybox").innerHTML='<textarea rows="8" readonly id="cp"></textarea>';const c=$("#cp");c.value=t;c.select()};
+  try{navigator.clipboard.writeText(t).then(()=>warn("Скопійовано."),show)}catch(x){show()}}
+ else if(act==="reset"){A={};cur=0;render(true)}
+});
+document.addEventListener("change",e=>{
+ const el=e.target,d=items[cur].d;if(!d)return;const a=st(d.id);
+ if(el.dataset.act==="sel"){a.v=a.v||[];a.v[+el.dataset.i]=el.value}
+ if(el.dataset.act==="chk"){a.v=a.v||[];const i=+el.dataset.i;a.v=el.checked?[...new Set([...a.v,i])]:a.v.filter(x=>x!==i)}
+});
+document.addEventListener("input",e=>{
+ const f=e.target.dataset.f;if(!f)return;
+ if(f==="plan"){A.plan=e.target.value;return}
+ const d=items[cur].d;if(d)st(d.id).text=e.target.value;
+});
+render();
+</script>
+</body>
+</html>
